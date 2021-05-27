@@ -1,0 +1,70 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">VerifyFacial</string>
+
+
+    <string name="titulo_splash">Solución para Control de Asistencia</string>
+
+
+    <string name="titulo_Home">We develop software for a better future</string>
+
+    <!-- VALUES LOGIN -->
+    <string name="login_input_n_documento">N° Documento</string>
+    <string name="login_input_password">Contraseña</string>
+    <string name="login_btn_ingresar">INGRESAR</string>
+
+
+    <!-- HOme ACTIVITY -->
+    <string name="text_entrada">Marque su horario de ingreso con cualquiera de nuestras técnicas de verificación biométrica. La verificación dactilar requiere un dispositivo biométrico.</string>
+    <string name="text_salida">Marque su horario de salida utilizando técnicas de verificación dactilar o facial. El reconocimiento facial incluye prueba activa de vida.</string>
+    <string name="home_recuadro">Nuestras soluciones biométricas lo ayudarán a mantener sus aplicaciones seguras. Además, se pueden integrar con sus propias soluciones.</string>
+    <string name="home_bottom1_text">Powered by SDSC</string>
+    <string name="home_bottom2_text">© 2021 SDSC. Todos los derechos reservador</string>
+
+    <!-- splash ACTIVITY -->
+    <string name="splash_verify">ASIS</string>
+    <string name="splash_face">CTRL</string>
+    <string name="splash_powered">Developed by</string>
+    <string name="version_apk">Version 1.0.0</string>
+
+    <!-- Information ACTIVITY -->
+
+    <string name="Information_dtlle">The application through Machine Learning and deep learning technology allows you to register your facial features. Then you can validate them through a secure proof of liveness detection mechanism.</string>
+    <string name="Information_web">texto_contacto</string>
+    <string name="Information_contact_us">texto_contacto</string>
+
+    <!-- INSTRUCCION ACTIVITY -->
+    <string name="instruccion_titulo">INDICATIONS</string>
+    <string name="instruccion_iluminacion">Good lighting of the face and the environment.</string>
+    <string name="instruccion_lentes">Do not wear glasses.</string>
+    <string name="instruccion_distancia">Take a capture distance of 50cm.</string>
+    <string name="instruccion_pestaniear">Stare into the camera and blink.</string>
+    <string name="instruccion_img_iluminacion">Imagen ilumimación</string>
+    <string name="instruccion_img_lentes">Imagen lentes</string>
+    <string name="instruccion_img_distancia">Imagen distancia</string>
+    <string name="instruccion_img_pestaniear">Imagen pestañear</string>
+    <string name="instruccion_chck_disipar">Don\'t show this again</string>
+    <string name="instruccion_btn_continuar">Continue</string>
+
+    <!-- dialog validation ACTIVITY -->
+
+    <string name="title_dialog_validation">VALIDATION</string>
+    <string name="text1_dialog_validation">Validate with VerifyFace</string>
+    <string name="text2_dialog_validation">Please enter your email account created to access the validation.</string>
+    <string name="btn1_dialog_validation">Submit</string>
+    <string name="btn2_dialog_validation">Cancel</string>
+    <string name="input_text_dialog_validation">Email Andress</string>
+    <string name="error_dialog_validation">Your email address does not exist. You must first register.</string>
+
+    <!-- dialog enrollment ACTIVITY -->
+
+    <string name="title_dialog_enrollment">REGISTER</string>
+    <string name="text1_dialog_enrollment">Sing up with VerifyFace</string>
+    <string name="text2_dialog_enrollment">Please enter your email account to create an account.</string>
+    <string name="btn1_dialog_enrollment">Register</string>
+    <string name="btn2_dialog_enrollment">Cancel</string>
+    <string name="input_text_dialog_enrollment">Email Andress</string>
+    <string name="error_dialog_enrollment">Your email address already exists</string>
+
+    <string name="informacion_usuario_2">Al poner mis huellas en el lector, declaro que he leído y autorizo expresamente el tratamiento de mis datos.</string>
+
+</resources>

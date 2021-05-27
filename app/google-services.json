@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "997322575207",
+    "firebase_url": "https://verifyfacialdemo.firebaseio.com",
+    "project_id": "verifyfacialdemo",
+    "storage_bucket": "verifyfacialdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997322575207:android:c4c5c490d11c10763533c2",
+        "android_client_info": {
+          "package_name": "com.acj.mobile.android.verifyfacial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997322575207-6bt677scantn739h94uqv45hui1jhvv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWjlfL3-iqQrU-pdM3fHjY0XxX4jLwzJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997322575207-6bt677scantn739h94uqv45hui1jhvv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
