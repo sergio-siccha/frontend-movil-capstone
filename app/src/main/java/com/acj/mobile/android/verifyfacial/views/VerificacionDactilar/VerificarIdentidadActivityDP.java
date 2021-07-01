@@ -31,8 +31,10 @@ import com.acj.mobile.android.verifyfacial.functions.GlobalConfig;
 import com.acj.mobile.android.verifyfacial.functions.Globals;
 import com.acj.mobile.android.verifyfacial.model.GenericalResponse;
 import com.acj.mobile.android.verifyfacial.model.MejoresHuellasResponse;
+import com.acj.mobile.android.verifyfacial.model.RequestAsistencia;
 import com.acj.mobile.android.verifyfacial.service.ApiUtils;
 import com.acj.mobile.android.verifyfacial.service.DatoBiometricoController;
+import com.acj.mobile.android.verifyfacial.utils.Util;
 import com.digitalpersona.uareu.Fmd;
 import com.digitalpersona.uareu.ReaderCollection;
 import com.digitalpersona.uareu.UareUException;
@@ -96,6 +98,8 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
     private String textdedoIzquierdo;
     private int intentoCaptura;
 
+    private RequestAsistencia requestAsistencia;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +123,18 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
 
         mContext = this;
         numeroDocumento = GlobalConfig.getInstance().getResponseAuth().getUsername();
+
+        /* REQUEST DE ASISTENCIA*/
+        int tipoOperacion = getIntent().getExtras().getInt("tipoOperacion", 0);
+
+        requestAsistencia = new RequestAsistencia();
+        requestAsistencia.setTipoOperacion(tipoOperacion);
+        requestAsistencia.setTipoVerificacion(1); // Verificacion tipo 2 es facial
+        requestAsistencia.setTipoDocumento(1);
+        requestAsistencia.setNumeroDocumento(GlobalConfig.getInstance().getResponseAuth().getUsername());
+        requestAsistencia.setNombreCompletoUsuario(GlobalConfig.getInstance().getResponseAuth().getNombre() + " " +
+									GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno() + " " +
+									GlobalConfig.getInstance().getResponseAuth().getApellidoMaterno());
 
         quality = 0;
         huella1 = "";
@@ -492,7 +508,7 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
                 dialogVerificandoHuellas.setTitle("Verificando huella");
                 dialogVerificandoHuellas.show();
 
-                // sendPost();
+                sendPost();
             } else if (quality > 2) {
              new HiloCaptura().start();
             }
@@ -504,178 +520,50 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
     }
 
 
-    /*public void sendPost() {
-        Log.i("MAVERICK ", "-------iplocal--------" + Util.getPublicIPAddress(this));
-//
-        Log.i("MAVERICK ", "-------Funciono A MEDIAS --------" + Util.bytesToString(currentFingerPrint));
-        VerificarIdentidadReniecService verificarIdentidadReniec = APIUtils.getApiReniec().create(VerificarIdentidadReniecService.class);
+    public void sendPost() {
 
-        RequestReniec requestReniec = new RequestReniec();
-        DataBiometrica dataBiometrica = new DataBiometrica();
-
-        requestReniec.setNumeroDocumentoConsulta(numeroDocumento);
-        requestReniec.setIdEmpresa(GlobalConfig.getInstance().getIdEmpresa());
-        requestReniec.setIndicadorRepositorio(0);
-
-        Log.i("send post", "Serial Number: " + eikonGlobal.getCodigoDispositivo());
-
-        requestReniec.setNumeroSerieDispositivo(eikonGlobal.getCodigoDispositivo());
-        requestReniec.setNumeroDocumentoUsuario(GlobalConfig.getInstance().getNumeroDocumentoUsuario());
-        requestReniec.setIpCliente(default_ip);
-        requestReniec.setBase64(Util.bytesToString(currentFingerPrint));
-        requestReniec.setNombreCompleto(nombreCompleto);
-
-        dataBiometrica.setTipoDato(1);
+        requestAsistencia.getDatoBiometrico().setImagenBiometrico(Util.bytesToString(currentFingerPrint));
 
         if (GlobalConfig.getInstance().getIntentosXManos() == 1) {
-            dataBiometrica.setIdentificadorDato(Integer.parseInt(dedoDerecho));
+            requestAsistencia.setIdentificadorDato(Integer.parseInt(dedoDerecho));
         }else if(GlobalConfig.getInstance().getIntentosXManos() == 2){
-            dataBiometrica.setIdentificadorDato(Integer.parseInt(dedoIzquierdo));
+            requestAsistencia.setIdentificadorDato(Integer.parseInt(dedoDerecho));
         }
 
-        dataBiometrica.setTipoTemplate(1);
-        dataBiometrica.setTipoImagen(0);
-        dataBiometrica.setImagenBiometrico(Util.bitmapToBase64(m_bitmap));
-        dataBiometrica.setCalidadBiometrica(quality);
-
-        requestReniec.setDatoBiometrico(dataBiometrica);
-
-        requestReniec.setLatitudGPS(String.valueOf(latitud));
-        requestReniec.setLongitudGPS(String.valueOf(longitud));
-
-*//*        System.out.println("Latitud: " + latitud);
-        System.out.println("Longitud: " + longitud);*//*
-
-        Log.i(TAG, "-------REQUEST RENIEC SENDPOST --------");
-        Log.i(TAG, requestReniec.toString());
-
-        if(dataBiometrica.getCalidadBiometrica() != null &&  requestReniec.getNumeroSerieDispositivo() !=null && requestReniec.getBase64() != null) {
-
-            verificarIdentidadReniec.envioDatosDactilarReniec(requestReniec).enqueue(new Callback<ResponseReniec>() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        if(requestAsistencia.getDatoBiometrico().getImagenBiometrico() != null) {
+            DatoBiometricoController datoBiometricoController = ApiUtils.getApi().create(DatoBiometricoController.class);
+            Call<GenericalResponse> asistencia = datoBiometricoController.marcarAsistencia(requestAsistencia);
+            asistencia.enqueue(new Callback<GenericalResponse>() {
                 @Override
-                public void onResponse(Call<ResponseReniec> call, Response<ResponseReniec> response) {
-                    ResponseReniec responseReniec = response.body();
-                    if (response.isSuccessful()) {
-                        getIntent().getExtras().clear();
+                public void onResponse(Call<GenericalResponse> call, retrofit2.Response<GenericalResponse> response) {
+                    if(response.isSuccessful()) {
+                        Log.i(TAG, "----------------- SUCCESSFULL -----------------");
+                        Log.i(TAG, "            Se obtuvo una respuesta ");
+                        Log.i(TAG, response.body().toString());
+                        Log.i(TAG, "----------------- SUCCESSFULL -----------------");
 
-                        GsonBuilder gson = new GsonBuilder();
-                        Type type = new TypeToken<ResponseObjectReniec>() {
-                        }.getType();
-                        String json = gson.create().toJson(responseReniec.getObjeto());
-                        ResponseObjectReniec object = gson.create().fromJson(json, type);
-                        Log.i("MAVERICK ", "-------Funciono bien --------"  + object.getToken());
-
-                        retardo();
                         dialogVerificandoHuellas.dismiss();
 
-                        Log.i(TAG, "-------contador de intentos  --------" + intentos);
-                        if (object.getCodigoErrorReniec() == 70006) {
-                            Intent in = new Intent(getApplicationContext(), ResultadosReniecDactilar.class);
-                            in.putExtra("DNI", object.getNumeroDocumento());
-
-*//*                            in.putExtra("nombres", nombres);
-                            in.putExtra("paterno", paterno);
-                            in.putExtra("materno", materno);*//*
-
-                            in.putExtra("nombreCompleto", nombreCompleto);
-
-                            in.putExtra("codRspta", String.valueOf(object.getCodigoError()));
-                            in.putExtra("desRspta", object.getDescripcionError());
-                            in.putExtra("codReniec", String.valueOf(object.getCodigoErrorReniec()));
-                            in.putExtra("desReniec", object.getDescripcionErrorReniec());
-                            in.putExtra("tokenReniec", object.getToken());
-                            if (intentos == 3) { intentos++; }
-                            colorXIntentos(intentos);
-                            finish();
-
-                            startActivity(in);
-
-                            getIntent().getExtras().clear();
-
-                        } else if (object.getCodigoErrorReniec() == 70007){
-                            if (intentos < 3) {
-                                intentos++;
-                                textDedosHabilitados.setVisibility(View.GONE);
-                                SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
-                                a.setCancelable(false);
-                                a.setCanceledOnTouchOutside(false);
-                                a.setTitle("¡Oh, no!");
-                                a.setContentText("La persona no ha sido identificada(NO HIT)" +
-                                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" +
-                                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" +
-                                        "¿ Desea realizar otro intento ?");
-                                a.setConfirmText("Si");
-                                a.setCancelText("Regresar");
-                                a.setConfirmButtonTextColor(Color.WHITE);
-                                a.setConfirmButtonBackgroundColor(getResources().getColor(R.color.bg_success));
-                                a.setCancelButtonTextColor(Color.WHITE);
-                                a.setCancelButtonBackgroundColor(getResources().getColor(R.color.bg_danger));
-                                a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        intentoCaptura = 0;
-                                        sDialog.dismiss();
-                                        colorXIntentos(intentos);
-                                        if (GlobalConfig.getInstance().getIntentosXManos() == 1) {
-                                            textverificarDactilar.setText("");
-                                            dedoInhabilitado.setVisibility(View.INVISIBLE);
-                                            textDedosHabilitados.setVisibility(View.GONE);
-                                            fingerprintImageView.setImageDrawable(null);
-                                        } else if (GlobalConfig.getInstance().getIntentosXManos() == 2) {
-                                            textverificarDactilar.setText("");
-                                            dedoInhabilitado.setVisibility(View.INVISIBLE);
-                                            textDedosHabilitados.setVisibility(View.GONE);
-                                            fingerprintImageView.setImageDrawable(null);
-                                        }
-                                    }
-                                });
-                                a.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                        sweetAlertDialog.dismiss();
-                                        colorXIntentos(intentos);
-                                        intentos = 0;
-                                        GlobalConfig.getInstance().setIntentosXManos(1);
-                                        finish();
-                                    }
-                                });
-                                a.show();
-                            }else if (intentos > 2) {
-                                colorXIntentos(intentos);
-
-                                Intent in = new Intent(getApplicationContext(), ResultadosReniecDactilar.class);
-                                in.putExtra("DNI", object.getNumeroDocumento());
-
-*//*                                in.putExtra("nombres", "Nombres");
-                                in.putExtra("paterno", "Apellidos");
-                                in.putExtra("materno", ""); *//*
-
-                                in.putExtra("nombreCompleto", nombreCompleto);
-
-                                in.putExtra("codRspta", String.valueOf(object.getCodigoError()));
-                                in.putExtra("desRspta", object.getDescripcionError());
-                                in.putExtra("codReniec", String.valueOf(object.getCodigoErrorReniec()));
-                                in.putExtra("desReniec", object.getDescripcionErrorReniec());
-                                in.putExtra("tokenReniec", object.getToken());
-                                Log.i(TAG, "----------intentos por manos realizadas----" + GlobalConfig.getInstance().getIntentosXManos() + object.getToken());
-                                finish();
-
-                                textDedosHabilitados.setText("");
-
-                                startActivity(in);
-
-                                getIntent().getExtras().clear();
-                            }
+                        if(response.body() != null && response.body().getCodigoRespuesta().equals("200")){
+                            SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.SUCCESS_TYPE);
+                            a.setCancelable(false);
+                            a.setCanceledOnTouchOutside(false);
+                            a.setConfirmText("OK");
+                            a.setContentText(response.body().getDescRespuesta());
+                            a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            a.show();
                         } else {
                             SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
                             a.setCancelable(false);
                             a.setCanceledOnTouchOutside(false);
-                            a.setTitleText("¡Error en la verificación! Código N°: " + object.getCodigoErrorReniec());
-                            a.setConfirmText("Ok");
-                            a.setConfirmButtonTextColor(Color.WHITE);
-                            a.setConfirmButtonBackgroundColor(Color.RED);
-                            a.setContentText("Concepto del error: " + object.getDescripcionErrorReniec());
+                            a.setConfirmText("OK");
+                            a.setContentText(response.body().getDescRespuesta());
                             a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
@@ -685,26 +573,38 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
                             });
                             a.show();
                         }
+                    } else {
+                        SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                        a.setCancelable(false);
+                        a.setCanceledOnTouchOutside(false);
+                        a.setConfirmText("OK");
+                        a.setContentText("Ocurrió un error al realizar la verificación");
+                        a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                finish();
+                            }
+                        });
+                        a.show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseReniec> call, Throwable t) {
-                    dialogVerificandoHuellas.dismiss();
-                    Log.i("MAVERICK ", "-------Funciono A malS --------");
-                    AlertDialog.Builder builder = new AlertDialog.Builder(VerificarIdentidadReniecActivityDP.this);
-                    builder.setMessage(
-                            "Error en post")
-                            .setTitle("Resultado")
-                            .setCancelable(false)
-                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                public void onFailure(Call<GenericalResponse> call, Throwable t) {
+                    SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                    a.setCancelable(false);
+                    a.setCanceledOnTouchOutside(false);
+                    a.setConfirmText("OK");
+                    a.setContentText("Ocurrió un error al realizar la verificación");
+                    a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismiss();
+                            finish();
+                        }
+                    });
+                    a.show();
                 }
             });
         }else{
@@ -728,7 +628,6 @@ public class VerificarIdentidadActivityDP extends AppCompatActivity {
 
         }
     }
-*/
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

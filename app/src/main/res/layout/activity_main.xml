@@ -4,192 +4,174 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="top"
+        android:background="#3264A4"
+        android:clipToPadding="false"
+        android:paddingLeft="25dp"
+        android:paddingTop="30dp"
+        android:paddingRight="25dp">
+
+        <TextView
+            android:id="@+id/t1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textUsuarioNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/t1"
+            android:fontFamily="sans-serif-black"
+            android:letterSpacing="0.04"
+            android:text="Unknowm Unknowm"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+
 
         <ImageView
-            android:id="@+id/btn_info"
-            android:layout_width="54dp"
-            android:layout_height="37dp"
-            android:layout_gravity="right"
-            android:layout_marginBottom="-35dp"
-            android:clickable="true"
-            android:src="@drawable/ic_info_black_24dp" />
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/logo_hwr" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="134dp"
-            android:layout_height="70dp"
-            android:padding="10dp"
+    </RelativeLayout>
+
+    <LinearLayout
+
+        android:layout_width="385dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="@drawable/fondosec"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+        <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SISTEMA PARA \n GESTIÓN"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:layout_gravity="center"
-            android:src="@drawable/logo_hwr" />
+            android:textColor="#fff"
+            android:paddingLeft="20dp"
+            android:fontFamily="sans-serif-black"
+            android:paddingTop="50dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DE ASISTENCIA"
+            android:textSize="35dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-black"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"/>-->
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="60dp"
+        android:paddingBottom="60dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="#F0833A55"
-            android:theme="@style/MyMaterialTheme">
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:layout_marginRight="30dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="30dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#a64d79"
+                android:id="@+id/btn_Enrollment"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="#585CDE"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <!-- Media -->
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/icon_entrada" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="8dp"
+                    android:text="Marcar\nEntrada"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
 
-                    <!-- Title, secondary and supporting text -->
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_person_add_black_24dp"
-                        android:text="ENTRADA"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="@string/text_entrada"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="#00B4A7D5"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_Enrollment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:layout_marginRight="8dp"
-                        android:background="#d6a6be"
-                        android:text="MARCAR ENTRADA"
-                        android:textColor="#000000"
-                        android:textSize="12sp"
-                        app:backgroundTint="#d6a6be" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="#673AB7">
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="30dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#673AB7"
+                android:id="@+id/btn_verification"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="#585CDE"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <!-- Media -->
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/icon_salida" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="8dp"
+                    android:text="Marcar\nSalida"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
 
-                    <!-- Title, secondary and supporting text -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_check_box_black_24dp"
-                        android:text="SALIDA"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="@string/text_salida"
-                        android:textColor="#FFFFFF"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="#00833A55"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_verification"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="#b4a7d5"
-                        android:text="MARCAR SALIDA"
-                        android:textColor="#000000"
-                        android:textSize="12sp"
-                        app:backgroundTint="#b4a7d5" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -199,18 +181,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/border"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/home_recuadro"
-            android:textColor="#666666" />
+            android:textColor="#111" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:paddingTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -224,21 +206,21 @@
             android:background="#000000" />
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/home_bottom1_text"
-            android:textColor="#021B4E" />
-
-        <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/home_bottom2_text"
-            android:textColor="#021B4E" />
+            android:textColor="#111" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/home_bottom1_text"
+        android:textColor="#FFF" />
 
 </LinearLayout>

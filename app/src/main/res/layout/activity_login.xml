@@ -20,16 +20,17 @@
         android:src="@drawable/logo_login_final" />
 
     <LinearLayout
+        android:backgroundTint="@color/AliceBlue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="11"
         android:background="@color/White"
-        android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
 
 
         <LinearLayout
+            android:paddingTop="55dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -82,7 +83,7 @@
                 android:id="@+id/btn_ingresar_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_login_disabled"
+                android:background="@color/button_login_disabled"
                 android:clickable="false"
                 android:text="@string/login_btn_ingresar"
                 android:textColor="@color/White"

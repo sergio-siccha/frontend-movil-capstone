@@ -13,10 +13,13 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.acj.mobile.android.verifyfacial.functions.EikonGlobal;
 import com.acj.mobile.android.verifyfacial.functions.Globals;
@@ -34,10 +37,10 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MainActivity extends AppCompatActivity {
     private static final String ACTION_USB_PERMISSION = "com.digitalpersona.uareu.dpfpddusbhost.USB_PERMISSION";
 
-    private Button btnEntrada;
-    private Button btnSalida;
+    private LinearLayout btnEntrada;
+    private LinearLayout btnSalida;
     private Button salir;
-    private ImageView btnInfo;
+    private TextView txtNombre;
 
     private Context mContext;
 
@@ -54,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        btnEntrada = (Button) findViewById(R.id.btn_Enrollment);
-        btnSalida = (Button) findViewById(R.id.btn_verification);
-        btnInfo = (ImageView) findViewById(R.id.btn_info);
+        btnEntrada = (LinearLayout) findViewById(R.id.btn_Enrollment);
+        btnSalida = (LinearLayout) findViewById(R.id.btn_verification);
+        txtNombre = (TextView) findViewById(R.id.textUsuarioNombre);
 
         mContext = this;
 
@@ -76,8 +79,12 @@ public class MainActivity extends AppCompatActivity {
         a.setCanceledOnTouchOutside(false);
         a.setConfirmButtonTextColor(Color.GREEN);
         a.setConfirmButtonTextColor(Color.WHITE);
-        a.setContentText("Bienvenido: " + GlobalConfig.getInstance().getResponseAuth().getNombre());
+        a.setContentText("Bienvenido: " + GlobalConfig.getInstance().getResponseAuth().getNombre() + " " + 
+									GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno() + " " +
+									GlobalConfig.getInstance().getResponseAuth().getApellidoMaterno());
         a.show();
+
+        txtNombre.setText(GlobalConfig.getInstance().getResponseAuth().getNombre() + " " + GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno().substring(0,1) + ".");
 
         GlobalConfig.getInstance().setBienvenidaShowed(true);
     }
@@ -159,13 +166,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnInfo.setOnClickListener(new View.OnClickListener() {
+        /*btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), InformationActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     private void solicitarPermisos(){

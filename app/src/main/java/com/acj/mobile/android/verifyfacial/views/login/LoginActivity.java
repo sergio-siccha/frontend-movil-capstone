@@ -64,8 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mContext = this;
 
-        btnIngresarLogin.setEnabled(false);
-
         btnIngresarLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,13 +90,11 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= 8) {
-                    btnIngresarLogin.setEnabled(true);
+                if (s.length() == 8) {
                     btnIngresarLogin.setClickable(true);
-                    btnIngresarLogin.setBackground(getResources().getDrawable(R.drawable.btn_login));
+                    btnIngresarLogin.setBackground(getResources().getDrawable(R.color.button_login_enabled));
                 }else{
-                    btnIngresarLogin.setBackground(getResources().getDrawable(R.drawable.btn_login_disabled));
-                    btnIngresarLogin.setEnabled(false);
+                    btnIngresarLogin.setBackground(getResources().getDrawable(R.color.button_login_disabled));
                     btnIngresarLogin.setClickable(false);
                 }
             }

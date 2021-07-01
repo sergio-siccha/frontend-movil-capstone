@@ -353,5 +353,8 @@
     <color name="trans_black">#8c000000</color>
     <color name="celeste_overlay">#0892f0</color>
 
+    <color name="button_login_disabled">#9E66EE</color>
+    <color name="button_login_enabled">#6404EC</color>
+
 </resources>
 

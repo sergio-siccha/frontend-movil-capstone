@@ -13,5 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DatoBiometrico {
+    private int identificadorDato;
     private String imagenBiometrico;
 }
