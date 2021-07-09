@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import com.acj.mobile.android.verifyfacial.functions.EikonGlobal;
 import com.acj.mobile.android.verifyfacial.functions.Globals;
+import com.acj.mobile.android.verifyfacial.model.GenericalResponse;
+import com.acj.mobile.android.verifyfacial.service.ApiUtils;
+import com.acj.mobile.android.verifyfacial.service.DatoBiometricoController;
 import com.acj.mobile.android.verifyfacial.views.VerificacionDactilar.VerificarIdentidadActivityDP;
 import com.acj.mobile.android.verifyfacial.functions.GlobalConfig;
 import com.acj.mobile.android.verifyfacial.views.VerificacionFacial.FaceRecognitionActivity_Gestos;
@@ -33,6 +36,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACTION_USB_PERMISSION = "com.digitalpersona.uareu.dpfpddusbhost.USB_PERMISSION";
@@ -84,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
 									GlobalConfig.getInstance().getResponseAuth().getApellidoMaterno());
         a.show();
 
-        txtNombre.setText(GlobalConfig.getInstance().getResponseAuth().getNombre() + " " + GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno().substring(0,1) + ".");
+        txtNombre.setText(GlobalConfig.getInstance().getResponseAuth().getNombre() + " " +
+                GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno().substring(0,1) + ".");
 
         GlobalConfig.getInstance().setBienvenidaShowed(true);
     }
@@ -97,6 +104,48 @@ public class MainActivity extends AppCompatActivity {
         btnEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*DatoBiometricoController datoBiometricoController = ApiUtils.getApi().create(DatoBiometricoController.class);
+                Call<GenericalResponse> status = datoBiometricoController.getStatusByNumeroDocumento(GlobalConfig.getInstance().getResponseAuth().getUsername());
+                status.enqueue(new Callback<GenericalResponse>() {
+                    @Override
+                    public void onResponse(Call<GenericalResponse> call, retrofit2.Response<GenericalResponse> response) {
+                        if(response.isSuccessful()) {
+                            validarEstado();
+                        } else {
+                            SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                            a.setCancelable(false);
+                            a.setCanceledOnTouchOutside(false);
+                            a.setConfirmText("OK");
+                            a.setContentText("Ocurrió un error al verificar el estado del usuario");
+                            a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            a.show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GenericalResponse> call, Throwable t) {
+                        SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                        a.setCancelable(false);
+                        a.setCanceledOnTouchOutside(false);
+                        a.setConfirmText("OK");
+                        a.setContentText("Ocurrió un error al verificar el estado del usuario");
+                        a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                finish();
+                            }
+                        });
+                        a.show();
+                    }
+                });*/
+
                 SweetAlertDialog dialogOperacion = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
                 dialogOperacion.setTitleText("Tipo de Verificación");
                 dialogOperacion.setContentText("Seleccione el tipo de verificación que desea realizar");
