@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
 
         if (!GlobalConfig.getInstance().isBienvenidaShowed()) {
-            if(GlobalConfig.getInstance().getResponseAuth() != null) {
+            if (GlobalConfig.getInstance().getResponseAuth() != null) {
                 bienvenida();
             } else {
                 finishAffinity();
-                startActivity(new Intent(mContext,InicioSplashActivity.class));
+                startActivity(new Intent(mContext, InicioSplashActivity.class));
             }
         }
     }
@@ -85,13 +85,13 @@ public class MainActivity extends AppCompatActivity {
         a.setCanceledOnTouchOutside(false);
         a.setConfirmButtonTextColor(Color.GREEN);
         a.setConfirmButtonTextColor(Color.WHITE);
-        a.setContentText("Bienvenido: " + GlobalConfig.getInstance().getResponseAuth().getNombre() + " " + 
-									GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno() + " " +
-									GlobalConfig.getInstance().getResponseAuth().getApellidoMaterno());
+        a.setContentText("Bienvenido: " + GlobalConfig.getInstance().getResponseAuth().getNombre() + " " +
+                GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno() + " " +
+                GlobalConfig.getInstance().getResponseAuth().getApellidoMaterno());
         a.show();
 
         txtNombre.setText(GlobalConfig.getInstance().getResponseAuth().getNombre() + " " +
-                GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno().substring(0,1) + ".");
+                GlobalConfig.getInstance().getResponseAuth().getApellidoPaterno().substring(0, 1) + ".");
 
         GlobalConfig.getInstance().setBienvenidaShowed(true);
     }
@@ -104,13 +104,69 @@ public class MainActivity extends AppCompatActivity {
         btnEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*DatoBiometricoController datoBiometricoController = ApiUtils.getApi().create(DatoBiometricoController.class);
-                Call<GenericalResponse> status = datoBiometricoController.getStatusByNumeroDocumento(GlobalConfig.getInstance().getResponseAuth().getUsername());
+                DatoBiometricoController datoBiometricoController = ApiUtils.getApi().create(DatoBiometricoController.class);
+                Call<GenericalResponse> status = datoBiometricoController.getStatus(GlobalConfig.getInstance().getResponseAuth().getUsername());
                 status.enqueue(new Callback<GenericalResponse>() {
                     @Override
                     public void onResponse(Call<GenericalResponse> call, retrofit2.Response<GenericalResponse> response) {
-                        if(response.isSuccessful()) {
-                            validarEstado();
+                        if (response.isSuccessful()) {
+                            if (response.body().getCodigoRespuesta().equals("215")) {
+                                SweetAlertDialog dialogOperacion = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+                                dialogOperacion.setTitleText("Tipo de Verificación");
+                                dialogOperacion.setContentText("Seleccione el tipo de verificación que desea realizar");
+                                dialogOperacion.setConfirmText("FACIAL");
+                                dialogOperacion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        Intent facial = new Intent(MainActivity.this, FaceRecognitionActivity_Gestos.class);
+                                        facial.putExtra("tipoOperacion", 1);
+                                        startActivity(facial);
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                });
+
+                                dialogOperacion.setCancelButton("DACTILAR", new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        if (permisos) {
+                                            Intent dactilar = new Intent(MainActivity.this, VerificarIdentidadActivityDP.class);
+                                            dactilar.putExtra("tipoOperacion", 1);
+                                            startActivity(dactilar);
+                                            sweetAlertDialog.dismiss();
+                                        } else {
+                                            solicitarPermisos();
+                                            sweetAlertDialog.dismiss();
+                                        }
+                                    }
+                                });
+                                dialogOperacion.show();
+                            } else if (response.body().getCodigoRespuesta().equals("216")) {
+                                SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                                a.setCancelable(false);
+                                a.setCanceledOnTouchOutside(false);
+                                a.setConfirmText("OK");
+                                a.setContentText("Usted ya marcó su ingreso el día de hoy.");
+                                a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                    }
+                                });
+                                a.show();
+                            } else if (response.body().getCodigoRespuesta().equals("217")) {
+                                SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                                a.setCancelable(false);
+                                a.setCanceledOnTouchOutside(false);
+                                a.setConfirmText("OK");
+                                a.setContentText("Usted ya marcó su ingreso y salida el día de hoy.");
+                                a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                    }
+                                });
+                                a.show();
+                            }
                         } else {
                             SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
                             a.setCancelable(false);
@@ -121,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(SweetAlertDialog sDialog) {
                                     sDialog.dismiss();
-                                    finish();
                                 }
                             });
                             a.show();
@@ -139,42 +194,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.dismiss();
-                                finish();
                             }
                         });
                         a.show();
                     }
-                });*/
-
-                SweetAlertDialog dialogOperacion = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                dialogOperacion.setTitleText("Tipo de Verificación");
-                dialogOperacion.setContentText("Seleccione el tipo de verificación que desea realizar");
-                dialogOperacion.setConfirmText("FACIAL");
-                dialogOperacion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent facial = new Intent(MainActivity.this, FaceRecognitionActivity_Gestos.class);
-                        facial.putExtra("tipoOperacion", 1);
-                        startActivity(facial);
-                        sweetAlertDialog.dismiss();
-                    }
                 });
-
-                dialogOperacion.setCancelButton("DACTILAR", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        if(permisos) {
-                            Intent dactilar = new Intent(MainActivity.this, VerificarIdentidadActivityDP.class);
-                            dactilar.putExtra("tipoOperacion", 1);
-                            startActivity(dactilar);
-                            sweetAlertDialog.dismiss();
-                        } else {
-                            solicitarPermisos();
-                            sweetAlertDialog.dismiss();
-                        }
-                    }
-                });
-                dialogOperacion.show();
             }
 
         });
@@ -183,48 +207,106 @@ public class MainActivity extends AppCompatActivity {
         btnSalida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SweetAlertDialog dialogOperacion = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
-                dialogOperacion.setTitleText("Tipo de Verificación");
-                dialogOperacion.setContentText("Seleccione el tipo de verificación que desea realizar");
-                dialogOperacion.setConfirmText("FACIAL");
-                dialogOperacion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                DatoBiometricoController datoBiometricoController = ApiUtils.getApi().create(DatoBiometricoController.class);
+                Call<GenericalResponse> status = datoBiometricoController.getStatus(GlobalConfig.getInstance().getResponseAuth().getUsername());
+                status.enqueue(new Callback<GenericalResponse>() {
                     @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent facial = new Intent(MainActivity.this, FaceRecognitionActivity_Gestos.class);
-                        facial.putExtra("tipoOperacion", 2);
-                        startActivity(facial);
-                        sweetAlertDialog.dismiss();
-                    }
-                });
+                    public void onResponse(Call<GenericalResponse> call, retrofit2.Response<GenericalResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body().getCodigoRespuesta().equals("216")) {
+                                SweetAlertDialog dialogOperacion = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE);
+                                dialogOperacion.setTitleText("Tipo de Verificación");
+                                dialogOperacion.setContentText("Seleccione el tipo de verificación que desea realizar");
+                                dialogOperacion.setConfirmText("FACIAL");
+                                dialogOperacion.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        Intent facial = new Intent(MainActivity.this, FaceRecognitionActivity_Gestos.class);
+                                        facial.putExtra("tipoOperacion", 2);
+                                        startActivity(facial);
+                                        sweetAlertDialog.dismiss();
+                                    }
+                                });
 
-                dialogOperacion.setCancelButton("DACTILAR", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        if(permisos) {
-                            Intent dactilar = new Intent(MainActivity.this, VerificarIdentidadActivityDP.class);
-                            dactilar.putExtra("tipoOperacion", 2);
-                            startActivity(dactilar);
-                            sweetAlertDialog.dismiss();
+                                dialogOperacion.setCancelButton("DACTILAR", new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        if (permisos) {
+                                            Intent dactilar = new Intent(MainActivity.this, VerificarIdentidadActivityDP.class);
+                                            dactilar.putExtra("tipoOperacion", 2);
+                                            startActivity(dactilar);
+                                            sweetAlertDialog.dismiss();
+                                        } else {
+                                            solicitarPermisos();
+                                            sweetAlertDialog.dismiss();
+                                        }
+                                    }
+                                });
+                                dialogOperacion.show();
+                            } else if (response.body().getCodigoRespuesta().equals("215")) {
+                                SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                                a.setCancelable(false);
+                                a.setCanceledOnTouchOutside(false);
+                                a.setConfirmText("OK");
+                                a.setContentText("Primero debe marcar su ingreso antes de marcar su salida.");
+                                a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                    }
+                                });
+                                a.show();
+                            } else if (response.body().getCodigoRespuesta().equals("217")) {
+                                SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                                a.setCancelable(false);
+                                a.setCanceledOnTouchOutside(false);
+                                a.setConfirmText("OK");
+                                a.setContentText("Usted ya marcó su ingreso y salida el día de hoy.");
+                                a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismiss();
+                                    }
+                                });
+                                a.show();
+                            }
                         } else {
-                            solicitarPermisos();
-                            sweetAlertDialog.dismiss();
+                            SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                            a.setCancelable(false);
+                            a.setCanceledOnTouchOutside(false);
+                            a.setConfirmText("OK");
+                            a.setContentText("Ocurrió un error al verificar el estado del usuario");
+                            a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismiss();
+                                }
+                            });
+                            a.show();
                         }
                     }
+
+                    @Override
+                    public void onFailure(Call<GenericalResponse> call, Throwable t) {
+                        SweetAlertDialog a = new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE);
+                        a.setCancelable(false);
+                        a.setCanceledOnTouchOutside(false);
+                        a.setConfirmText("OK");
+                        a.setContentText("Ocurrió un error al verificar el estado del usuario");
+                        a.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                            }
+                        });
+                        a.show();
+                    }
                 });
-                dialogOperacion.show();
             }
         });
-
-        /*btnInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), InformationActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
-    private void solicitarPermisos(){
+    private void solicitarPermisos() {
         Context applContextFragment = this;
 
         PendingIntent mPermissionIntentFragment;
@@ -233,21 +315,21 @@ public class MainActivity extends AppCompatActivity {
         applContextFragment.registerReceiver(mUsbReceiver, filterFragment);
 
         @SuppressLint("WrongConstant")
-        UsbManager managerFragment = (UsbManager)((Context)applContextFragment).getSystemService("usb");
+        UsbManager managerFragment = (UsbManager) ((Context) applContextFragment).getSystemService("usb");
         HashMap<String, UsbDevice> deviceListFragment = managerFragment.getDeviceList();
         Iterator deviceIteratorFragment = deviceListFragment.values().iterator();
 
         UsbDevice deviceFragment = null;
 
-        while(deviceIteratorFragment.hasNext()){
+        while (deviceIteratorFragment.hasNext()) {
             deviceFragment = (UsbDevice) deviceIteratorFragment.next();
         }
 
-        if(deviceFragment != null) {
+        if (deviceFragment != null) {
             Log.i("Sergio/PermisosEIKON", "TODO COMPLETO: " + deviceFragment.toString());
             Log.i("Sergio/PermisosEIKON", "PRODUCT NAME DEL DISPOSITIVO: " + deviceFragment.getProductName());
             managerFragment.requestPermission(deviceFragment, (PendingIntent) mPermissionIntentFragment);
-        }else{
+        } else {
             Log.i("VerificarFDP Huellero", "No Hay Huellero");
             SweetAlertDialog a = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
             a.setCancelable(false);
@@ -322,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                             permisos = true;
                             huellero = deteccionHuellero();
 
-                            if(permisos && huellero) {
+                            if (permisos && huellero) {
                                 Intent dactilar = new Intent(MainActivity.this, VerificarIdentidadActivityDP.class);
                                 dactilar.putExtra("tipVerificacion", 1);
                                 startActivity(dactilar);

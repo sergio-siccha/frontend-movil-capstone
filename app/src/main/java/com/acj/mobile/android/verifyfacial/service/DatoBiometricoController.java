@@ -25,5 +25,5 @@ public interface DatoBiometricoController {
     Call<GenericalResponse> marcarAsistencia(@Body RequestAsistencia body);
 
     @GET(API_ROUTE + "/getStatus/{numeroDocumento}")
-    Call<GenericalResponse> getStatusByNumeroDocumento(@Path("numeroDocumento") String numeroDocumento);
+    Call<GenericalResponse> getStatus(@Path("numeroDocumento") String numeroDocumento);
 }
